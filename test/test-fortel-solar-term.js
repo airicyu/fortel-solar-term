@@ -28,7 +28,7 @@ describe('fortel-solar-term test', function () {
             let year = 2019;
             for (let i = 0; i < 12; i++) {
                 let termMonthRange = new TermYearMonth(year, i + 1).getRange();
-                expect(termMonthRange.start.diff(moment(realTermTime[i]), 'seconds')).lt(5 * 300, `Test term month range error for term year 2019 term month ${i + 1}`);
+                expect(termMonthRange.start.diff(moment(realTermTime[i]).utcOffset(+8, true), 'seconds')).lt(5 * 300, `Test term month range error for term year 2019 term month ${i + 1}`);
             }
 
             done();
@@ -74,20 +74,20 @@ describe('fortel-solar-term test', function () {
 
     it("test TermDatetime->getYearTermMonth with 2019 data", function (done) {
         try {
-            expect(new TermDatetime(moment([2019, 2 - 1, 4, 11, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2018, termMonth: 12 });
-            expect(new TermDatetime(moment([2019, 2 - 1, 4, 12, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
-            expect(new TermDatetime(moment([2019, 2 - 1, 10, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
-            expect(new TermDatetime(moment([2019, 3 - 1, 6, 5, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
-            expect(new TermDatetime(moment([2019, 3 - 1, 6, 6, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 2 });
-            expect(new TermDatetime(moment([2019, 3 - 1, 10, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 2 });
-            expect(new TermDatetime(moment([2019, 12 - 1, 7, 18, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 10 });
-            expect(new TermDatetime(moment([2019, 12 - 1, 7, 19, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
-            expect(new TermDatetime(moment([2019, 12 - 1, 10, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
-            expect(new TermDatetime(moment([2020, 1 - 1, 1, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
-            expect(new TermDatetime(moment([2020, 1 - 1, 6, 5, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
-            expect(new TermDatetime(moment([2020, 1 - 1, 6, 6, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 12 });
-            expect(new TermDatetime(moment([2020, 1 - 1, 10, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 12 });
-            expect(new TermDatetime(moment([2020, 2 - 1, 5, 0, 0, 0])).getYearTermMonth()).to.eqls({ termYear: 2020, termMonth: 1 });
+            expect(new TermDatetime(moment([2019, 2 - 1, 4, 11, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2018, termMonth: 12 });
+            expect(new TermDatetime(moment([2019, 2 - 1, 4, 12, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
+            expect(new TermDatetime(moment([2019, 2 - 1, 10, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
+            expect(new TermDatetime(moment([2019, 3 - 1, 6, 5, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 1 });
+            expect(new TermDatetime(moment([2019, 3 - 1, 6, 6, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 2 });
+            expect(new TermDatetime(moment([2019, 3 - 1, 10, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 2 });
+            expect(new TermDatetime(moment([2019, 12 - 1, 7, 18, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 10 });
+            expect(new TermDatetime(moment([2019, 12 - 1, 7, 19, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
+            expect(new TermDatetime(moment([2019, 12 - 1, 10, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
+            expect(new TermDatetime(moment([2020, 1 - 1, 1, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
+            expect(new TermDatetime(moment([2020, 1 - 1, 6, 5, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 11 });
+            expect(new TermDatetime(moment([2020, 1 - 1, 6, 6, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 12 });
+            expect(new TermDatetime(moment([2020, 1 - 1, 10, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2019, termMonth: 12 });
+            expect(new TermDatetime(moment([2020, 2 - 1, 5, 0, 0, 0]).utcOffset(+8, true)).getYearTermMonth()).to.eqls({ termYear: 2020, termMonth: 1 });
 
             done();
         } catch (e) {
