@@ -1,7 +1,6 @@
 'use strict';
 
 const moment = require('moment');
-const { Stem, Branch } = require('fortel-codex');
 
 const timeToLongitude = require('./timeToLongitude');
 
@@ -36,11 +35,9 @@ function _bisection(target, initMin, initMax, formulaFunc, minMaxRangeThershold 
 
         if ((max - min) < minMaxRangeThershold) {
             return Math.round((min + max) / 2);
-            //return min + (max - min) * (target - minY) / (maxY - minY);
         }
         if (loopCount >= maxLoop) {
             return Math.round((min + max) / 2);
-            //return min + (max - min) * (target - minY) / (maxY - minY);
         }
     }
 }
@@ -55,7 +52,7 @@ function _getTermLongitude(solarTermIndex) {
 
 function _getTermDateRangeStartParams() {
     return [
-        [2, 3],
+        [2, 3],// term date range min start from 3/2, etc
         [2, 18],
         [3, 4],
         [3, 19],
@@ -251,89 +248,9 @@ function getDatetimeBySunLongitude(year, sunLongitude) {
     return _getLongitudeByTime(sunLongitude, referenceMinTime.unix(), referenceMaxTime.unix());
 }
 
-
-
-function getEightWordsByDatetime(datetime) {
-    datetime = moment(datetime).utcOffset("+08:00");
-    let year = datetime.get('year');
-    let month = datetime.get('month') + 1;
-    let day = datetime.get('date');
-    let hour = datetime.get('hour');
-    let minute = datetime.get('minute');
-    let second = datetime.get('second');
-    let hourBranchIndex = Math.floor((hour * 3600 + minute * 60 + second + 3600) / 7200);
-
-    let { termYear, termMonth } = getYearTermMonthByDatetime(datetime);
-
-    let yearStem = Stem.get([termYear - 4] % 10);
-    let yearBranch = Branch.get([termYear - 4] % 12);
-
-    let monthStem = Stem.get(((yearStem.index + 1) % 5) * 2).shift(termMonth - 1);
-    let monthBranch = Branch.get(termMonth + 1);
-
-    let dayStem;
-    let dayBranch;
-
-    {
-        let y = year;
-        let m = month;
-        let d = day;
-        if (m <= 2) {
-            y -= 1;
-            m += 12;
-        }
-        let c = (y - y % 100) / 100;
-        y = y % 100;
-        let g = 4 * c + Math.floor(c / 4) + 5 * y + Math.floor(y / 4) + Math.floor(3 * (m + 1) / 5) + d - 4;
-        let z = 8 * c + Math.floor(c / 4) + 5 * y + Math.floor(y / 4) + Math.floor(3 * (m + 1) / 5) + d + 6 + (m % 2 == 0 ? 6 : 0);
-
-        dayStem = Stem.get(g);
-        dayBranch = Branch.get(z);
-    }
-
-
-    let hourStem = Stem.get(dayStem.index * 2 + hourBranchIndex);
-    let hourBranch = Branch.get(hourBranchIndex);
-
-    hourStem = hourStem.displayName;
-    dayStem = dayStem.displayName;
-    monthStem = monthStem.displayName;
-    yearStem = yearStem.displayName;
-    hourBranch = hourBranch.displayName;
-    dayBranch = dayBranch.displayName;
-    monthBranch = monthBranch.displayName;
-    yearBranch = yearBranch.displayName;
-
-    let eightWords = {
-        'array2d.groupByStemBranch': [
-            [hourStem, dayStem, monthStem, yearStem],
-            [hourBranch, dayBranch, monthBranch, yearBranch],
-        ],
-        'array2d.groupByPillar': [
-            [hourStem, hourBranch],
-            [dayStem, dayBranch],
-            [monthStem, monthBranch],
-            [yearStem, yearBranch]
-        ],
-        'map': {
-            hourStem,
-            dayStem,
-            monthStem,
-            yearStem,
-            hourBranch,
-            dayBranch,
-            monthBranch,
-            yearBranch,
-        }
-    }
-
-    return eightWords;
-}
-
 module.exports = {
     getYearTermMonthDatetimeRange,
     getYearTermMonthByDatetime,
     getSunLongitudeByDatetime,
-    getDatetimeBySunLongitude,
-    getEightWordsByDatetime
+    getDatetimeBySunLongitude
 }
